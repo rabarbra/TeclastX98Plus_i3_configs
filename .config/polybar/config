@@ -54,12 +54,12 @@ module-margin-right = 2
 font-0 = fixed:pixelsize=18;1
 font-1 = unifont:fontformat=truetype:size=16:antialias=false;0
 font-2 = siji:pixelsize=18;1
-font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=8;3"
-font-4 = "Font Awesome 5 Brands:pixelsize=8;3"
+font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=24;3"
+font-4 = "Font Awesome 5 Brands:pixelsize=24;3"
 
-modules-left = i3
-modules-center = mpd closeactwin moveleft movedown konsole screenshot i3touchmenu touchredraw touchbrightdown touchbrightup touchkeyboard rotate
-modules-right = filesystem xbacklight alsa xkeyboard memory cpu eth battery temperature date
+modules-left = i3 i3touchmenu
+modules-center = mpd
+modules-right = screenshot touchredraw touchkeyboard rotate backlightoff touchbrightdown touchbrightup closeactwin filesystem xkeyboard memory cpu system-gpu-intel battery temperature date
 
 tray-position = right
 tray-padding = 2
@@ -383,94 +383,320 @@ ramp-1 = 
 ramp-2 = 
 ramp-foreground = ${colors.foreground-alt}
 
-#include-file = /home/polina/i3touchmenu/i3touchmenu
-
 [module/touchbrightdown]
 ;; Brightness down
 type=custom/text
-content=" Bd  "
+content=""
 content-foreground=#fff
-click-left=xbacklight -dec 10
+click-left=xbacklight -dec 10 >/dev/null 2>&1 &
 
 [module/touchbrightup]
 ;; Brightness up
 type=custom/text
-content="  Bu  "
+content=""
 content-foreground=#fff
-click-left=xbacklight -inc 10
+click-left=xbacklight -inc 10 >/dev/null 2>&1 &
+
+[module/backlightoff]
+type=custom/text
+content= 
+content-foreground=#fff
+click-left= xset dpms force off >/dev/null  2>&1 &
 
 [module/touchkeyboard]
 ;; Open onscreen keyboard (onboard)
 type=custom/text
-content=" Key "
+content=""
 content-foreground=#fff
-click-left= dbus-send --type=method_call --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible
+click-left= dbus-send --type=method_call --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible >/dev/null 2>&1 &
 
  
 [module/touchredraw]
 ;; Restart i3 in order to redraw polybar to fit screen orientation
 type=custom/text
-content = "  F5 "
+content = ""
 content-foreground=#fff
-click-left = i3-msg 'restart'
+click-left = i3-msg 'restart' >/dev/null 2>&1 &
 
 [module/rotate]
 type=custom/text
-content = " Ro "
+content = ""
 content-foreground=#fff
-click-left = exec /home/polina/.rotate.sh switch
+click-left = exec /home/polina/.rotate.sh switch >/dev/null 2>&1 &
 
 [module/closeactwin]
 type = custom/text
-content = "  X  "
+content = ""
 content-foreground=#fff
-click-left = exec xdotool key "Super_L+shift+Q"
+click-left = exec xdotool key "Super_L+shift+Q" >/dev/null 2>&1 &
 
 [module/moveleft]
 type = custom/text
 content = "  <  "
 content-foreground=#fff
-click-left = exec xdotool key "Super_L+shift+Left"
+click-left = exec xdotool key "Super_L+shift+Left" &
 
 [module/screenshot]
 type = custom/text
-content = "  Sc  "
+content = ""
 content-foreground=#fff
-click-left = exec xdotool key "Print"
+click-left = exec xdotool key "Print" >/dev/null 2>&1 &
 
 [module/konsole]
 type = custom/text
-content = "  Ko  "
+content = ""
 content-foreground=#fff
-click-left = exec xdotool key "Super_L+Return"
+click-left = exec xdotool key "Super_L+Return" >/dev/null 2>&1 &
 
 
 [module/movedown]
 type = custom/text
 content = "  v  "
 content-foreground=#fff
-click-left = exec xdotool key "Super_L+shift+Down"
+click-left = exec xdotool key "Super_L+shift+Down" &
 
 [module/touchvolmute]
 ;; Mute
 type=custom/text
 content=" Vm "
 content-foreground=#fff
-click-left=pactl set-sink-mute @DEFAULT_SINK@ toggle
+click-left=pactl set-sink-mute @DEFAULT_SINK@ toggle >/dev/null 2>&1 &
 
 [module/touchvoldown]
 ;; Volume down
 type=custom/text
 content=" Vd "
 content-foreground=#fff
-click-left=pactl set-sink-volume @DEFAULT_SINK@ -5% 
+click-left=pactl set-sink-volume @DEFAULT_SINK@ -5% &
 
 [module/touchvolup]
 ;; Volume up
 type=custom/text
 content="  Vu  "
 content-foreground=#fff
-click-left=pactl set-sink-volume @DEFAULT_SINK@ +5% 
+click-left=pactl set-sink-volume @DEFAULT_SINK@ +5% &
+
+[module/system-bluetooth-bluetoothctl]
+type = custom/script
+content = B
+exec = bash ~/polybar-scripts/polybar-scripts/system-bluetooth-bluetoothctl/system-bluetooth-bluetoothctl.sh
+tail = true
+click-left = exec bash ~/polybar-scripts/polybar-scripts/system-bluetooth-bluetoothctl/system-bluetooth-bluetoothctl.sh --toggle &
+
+[module/system-gpu-intel]
+type = custom/script
+format-underline = #4bffdc
+exec = bash ~/polybar-scripts/polybar-scripts/system-gpu-intel/system-gpu-intel.sh
+interval = 20
+
+[module/i3touchmenu]
+type = custom/menu
+
+expand-right = true
+
+format-spacing = 1
+
+;; Open the menu
+label-open = "  "
+label-open-foreground = #FFF
+
+;; Close the menu
+label-close = 
+label-close-foreground = ${colors.secondary}
+label-separator = "    "
+label-separator-foreground = ${colors.foreground-alt}
+
+;; Launcher
+menu-0-0 = 
+menu-0-0-exec = menu-open-1
+
+;; Move
+menu-0-1 = 
+menu-0-1-exec = menu-open-2
+
+;; Layout
+menu-0-2 = 
+menu-0-2-exec = menu-open-3
+
+;; Split
+menu-0-3 = 
+menu-0-3-exec = menu-open-4
+
+;; Resize
+menu-0-4 = 
+menu-0-4-exec = menu-open-5
+
+;; Move to workspace
+menu-0-5 = 
+menu-0-5-exec = menu-open-6
+
+;; Power
+menu-0-6 ="   " 
+menu-0-6-exec = menu-open-7
+
+;; Launcher: Back to main menu
+menu-1-0 = 
+menu-1-0-exec = menu-open-0
+
+;; Launcher: chromium
+menu-1-1=
+menu-1-1-exec= chromium >/dev/null 2>&1 &
+
+;; Launcher: urxvt
+menu-1-2=""
+menu-1-2-exec = konsole >/dev/null 2>&1 &
+
+;; Launcher: telegram
+menu-1-3=
+menu-1-3-exec= telegram-desktop >/dev/null 2>&1 &
+
+;; Launcher: dolphin
+menu-1-4=
+menu-1-4-exec= dolphin >/dev/null 2>&1 &
+
+;; Launcher: vscode
+menu-1-5=
+menu-1-5-exec=code >/dev/null 2>&1 &
+
+;; Launcher: vlc
+menu-1-6=
+menu-1-6-exec=vlc >/dev/null 2>&1 &
+
+;; Move: Back to main menu
+menu-2-0 = 
+menu-2-0-exec = menu-open-0
+
+;; Move: Left
+menu-2-1 = 
+menu-2-1-exec = i3-msg 'move left >/dev/null 2>&1 &
+;; Move: Right
+menu-2-2 = 
+menu-2-2-exec = i3-msg 'move right' >/dev/null 2>&1 &
+
+;; Move: Up
+menu-2-3 = 
+menu-2-3-exec = i3-msg 'move up' >/dev/null 2>&1 &
+
+;; Move: Down
+menu-2-4 = "   "
+menu-2-4-exec = i3-msg 'move down' >/dev/null 2>&1 &
+
+;; Layout: Back to main menu
+menu-3-0 = 
+menu-3-0-exec = menu-open-0
+
+;; Layout: Split
+menu-3-1 = 
+menu-3-1-exec = i3-msg 'layout toggle split' >/dev/null 2>&1 &
+
+;; Layout: Stacking
+menu-3-2 = 
+menu-3-2-exec = i3-msg 'layout stacking' >/dev/null 2>&1 &
+
+;; Layout: Tabbed
+menu-3-3 = 
+menu-3-3-exec = i3-msg 'layout tabbed' >/dev/null 2>&1 &
+
+;; Layout: Toggle floating
+menu-3-4 = "   "
+menu-3-4-exec = i3-msg 'floating toggle' >/dev/null 2>&1 &
+
+;; Split: Back to main menu
+menu-4-0 = 
+menu-4-0-exec = menu-open-0
+
+;; Split: Vertical
+menu-4-1 = 
+menu-4-1-exec = i3-msg 'split v' >/dev/null 2>&1 &
+
+;; Split: Horizontal
+menu-4-2 = "   "
+menu-4-2-exec = i3-msg 'split h' >/dev/null 2>&1 &
+
+;; Resize: Back to main menu
+menu-5-0 = 
+menu-5-0-exec = menu-open-0
+
+;; Resize: Grow height
+menu-5-1 = 
+menu-5-1-exec = i3-msg 'resize grow height 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Resize: Shrink height
+menu-5-2 =
+menu-5-2-exec = i3-msg 'resize shrink height 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Resize: Grow width
+menu-5-3 = 
+menu-5-3-exec = i3-msg 'resize grow width 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Resize: Shrink width
+menu-5-4 = "    "
+menu-5-4-exec = i3-msg 'resize shrink width 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Move to workspace: Back to main menu
+menu-6-0 = 
+menu-6-0-exec = menu-open-0
+
+;; Move to workspace: 1
+menu-6-1 = 1
+menu-6-1-exec = i3-msg 'move container to workspace 1'
+
+;; Move to workspace: 2
+menu-6-2 = 2
+menu-6-2-exec = i3-msg 'move container to workspace 2'
+
+;; Move to workspace: 3
+menu-6-3 = 3
+menu-6-3-exec = i3-msg 'move container to workspace 3'
+
+;; Move to workspace: 4
+menu-6-4 = 4
+menu-6-4-exec = i3-msg 'move container to workspace 4'
+
+;; Move to workspace: 5
+menu-6-5 = 5
+menu-6-5-exec = i3-msg 'move container to workspace 5'
+
+;; Move to workspace: 6
+menu-6-6 = 6
+menu-6-6-exec = i3-msg 'move container to workspace 6'
+
+;; Move to workspace: 7
+menu-6-7 = 7
+menu-6-7-exec = i3-msg 'move container to workspace 7'
+
+;; Move to workspace: 8
+menu-6-8 = 8
+menu-6-8-exec = i3-msg 'move container to workspace 8'
+
+;; Move to workspace: 9
+menu-6-9 = 9
+menu-6-9-exec = i3-msg 'move container to workspace 9'
+
+;; Move to workspace: 10
+menu-6-10 = "10    "
+menu-6-10-exec = i3-msg 'move container to workspace 10'
+
+;; Power: Back to main menu
+menu-7-0 = 
+menu-7-0-exec = menu-open-0
+
+;; Power: Screen off
+menu-7-1 = 
+menu-7-1-exec = xset dpms force off >/dev/null 2>&1 &
+
+;; Power: Lock
+menu-7-2 = 
+menu-7-2-exec = i3lock -i /home/polina/Pictures/zmh0ks.png >/dev/null 2>&1 &
+
+;; Power: Reboot
+menu-7-3 = 
+menu-7-3-exec = shutdown -r now
+
+;; Power: Shutdown
+menu-7-4 = "  "
+menu-7-4-exec = shutdown -h now
+
 
 ;;[module/launchmenu]
 ;;type = custom/menu
