@@ -5,9 +5,49 @@
 # this file and re-run i3-config-wizard(1).
 #
 
-# i3 config file (v4)
-#
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+exec --no-startup-id python /home/polina/.some_scripts/c6n-c6soff.py >/dev/null &
+exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id bash /home/polina/.rotate.sh initial >/dev/null &
+exec --no-startup-id touchegg >/dev/null &
+exec --no-startup-id nm-applet >/dev/null &
+exec --no-startup-id blueman-tray >/dev/null &
+#exec --no-startup-id screenrotator &
+#exec_always --no-startup-id /home/polina/.config/polybar/launch.sh >/dev/null &
+exec_always --no-startup-id ~/.config/i3/scripts/polybar_wrapper launch &
+exec_always --no-startup-id nitrogen --restore &
+exec_always setxkbmap -layout us,ru &
+exec_always setxkbmap -option 'grp:alt_shift_toggle' &
+exec --no-startup-id onboard &
+
+
+#================================= Appearance ================================#
+#----------------------------------- Colors ----------------------------------#
+# Colors are set from .Xresources. Fallback is Solarized color scheme
+set_from_resource $backgr background        #002B36
+set_from_resource $bg_alt background_alt    #93A1A1
+set_from_resource $foregr foreground        #586E75
+set_from_resource $primar primary           #268BD2
+set_from_resource $urgent urgent            #DC322F
+#-----------------------------------------------------------------------------#
+
+#----------------------------- Window appearance -----------------------------#
+# Window colors
+client.background $backgr   # default background color
+
+# bar border    - Border color around title bar (used in tabbed windows)
+# window border - Border color around window
+# text          - Text color for the title bar
+# indicator     - Color of border edge where new window will be created
+
+# class                 bar border  win border  text        indicator
+client.focused          $primar     $primar     $backgr     $primar
+client.focused_inactive $bg_alt     $bg_alt     $backgr     $bg_alt
+client.unfocused        $backgr     $backgr     $foregr     $backgr
+client.urgent           $backgr     $urgent     $backgr     $urgent
+
+# Tiled and floating findows have a border of 4 pixels
+default_border pixel 2
+default_floating_border pixel 2
 
 set $mod Mod4
 
@@ -18,17 +58,6 @@ font pango:monospace 16
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 font pango:DejaVu Sans Mono 16
-
-# The combination of xss-lock, nm-applet and pactl is a popular choice, so
-# they are included here as an example. Modify as you see fit.
-
-# xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
-# screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
-
-# NetworkManager is the most popular way to manage wireless networks on Linux,
-# and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet &
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -41,17 +70,20 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec konsole &
+bindsym $mod+Return exec urxvt &
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# start dmenu (a program launcher)
+# Bring up launcher
+bindsym $mod+d exec --no-startup-id ~/.config/i3/scripts/polybar_wrapper drun
+bindsym $mod+shift+d exec --no-startup-id ~/.config/i3/scripts/polybar_wrapper rofi
 
-bindsym $mod+t exec /home/polina/rofi-fontawesome/fontawesome-menu/fontawesome-menu -f /home/polina/rofi-fontawesome/fontawesome-menu/fa5-icon-list.txt -o '-i -columns 4'
-# shipping a .desktop file. It is a wrapper around dmenu, so you need that
-# installed.
-bindsym $mod+d exec --no-startup-id i3-dmenu-desktop &
+# Search open windows
+bindsym $mod+grave exec --no-startup-id ~/.config/i3/scripts/polybar_wrapper search
+
+# Open options menu
+bindsym $mod+BackSpace exec --no-startup-id ~/.config/i3/scripts/polybar_wrapper options
 
 # change focus
 bindsym $mod+j focus left
@@ -187,18 +219,137 @@ for_window [class="^.*"] border pixel 1
 new_window 1pixel
 
 default_orientation horizontal
+for_window [class="Yad" title="yad-calendar"] floating enable
 
-exec --no-startup-id python /home/polina/.some_scripts/c6n-c6soff.py &
-exec --no-startup-id bash /home/polina/.rotate.sh initial >/dev/null &
-exec --no-startup-id touchegg >/dev/null &
-exec --no-startup-id nm-applet >/dev/null &
-exec --no-startup-id blueman-tray >/dev/null &
-#exec --no-startup-id screenrotator &
-exec_always --no-startup-id /home/polina/.config/polybar/launch.sh >/dev/null &
-#exec --no-startup-id compton &
-exec_always --no-startup-id nitrogen --restore &
-exec --no-startup-id cbatticon -i symbolic -u 10 -c "shutdown -r now" &
-exec setxkbmap -layout us,ru &
-exec setxkbmap -option 'grp:alt_shift_toggle' &
-exec --no-startup-id onboard &
-#exec --no-startup-id ulauncher
+hide_edge_borders smart
+gaps top 21
+gaps inner 1
+
+set $mode_gaps Gaps: (o)uter, (i)nner, (h)orizontal, (v)ertical, (t)op, (r)ight, (b)ottom, (l)eft
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_horiz Horizontal Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_verti Vertical Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_top Top Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_right Right Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_bottom Bottom Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_left Left Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym h      mode "$mode_gaps_horiz"
+        bindsym v      mode "$mode_gaps_verti"
+        bindsym t      mode "$mode_gaps_top"
+        bindsym r      mode "$mode_gaps_right"
+        bindsym b      mode "$mode_gaps_bottom"
+        bindsym l      mode "$mode_gaps_left"
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_horiz" {
+        bindsym plus  gaps horizontal current plus 5
+        bindsym minus gaps horizontal current minus 5
+        bindsym 0     gaps horizontal current set 0
+
+        bindsym Shift+plus  gaps horizontal all plus 5
+        bindsym Shift+minus gaps horizontal all minus 5
+        bindsym Shift+0     gaps horizontal all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_verti" {
+        bindsym plus  gaps vertical current plus 5
+        bindsym minus gaps vertical current minus 5
+        bindsym 0     gaps vertical current set 0
+
+        bindsym Shift+plus  gaps vertical all plus 5
+        bindsym Shift+minus gaps vertical all minus 5
+        bindsym Shift+0     gaps vertical all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_top" {
+        bindsym plus  gaps top current plus 5
+        bindsym minus gaps top current minus 5
+        bindsym 0     gaps top current set 0
+
+        bindsym Shift+plus  gaps top all plus 5
+        bindsym Shift+minus gaps top all minus 5
+        bindsym Shift+0     gaps top all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_right" {
+        bindsym plus  gaps right current plus 5
+        bindsym minus gaps right current minus 5
+        bindsym 0     gaps right current set 0
+
+        bindsym Shift+plus  gaps right all plus 5
+        bindsym Shift+minus gaps right all minus 5
+        bindsym Shift+0     gaps right all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_bottom" {
+        bindsym plus  gaps bottom current plus 5
+        bindsym minus gaps bottom current minus 5
+        bindsym 0     gaps bottom current set 0
+
+        bindsym Shift+plus  gaps bottom all plus 5
+        bindsym Shift+minus gaps bottom all minus 5
+        bindsym Shift+0     gaps bottom all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_left" {
+        bindsym plus  gaps left current plus 5
+        bindsym minus gaps left current minus 5
+        bindsym 0     gaps left current set 0
+
+        bindsym Shift+plus  gaps left all plus 5
+        bindsym Shift+minus gaps left all minus 5
+        bindsym Shift+0     gaps left all set 0
+
+        bindsym Return mode "$mode_gaps"
+        bindsym Escape mode "default"
+}
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable

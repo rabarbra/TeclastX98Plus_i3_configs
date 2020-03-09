@@ -17,39 +17,33 @@
 ;==========================================================
 
 [colors]
-;background = ${xrdb:color0:#222}
-background = #222
-background-alt = #444
-;foreground = ${xrdb:color7:#222}
-foreground = #dfdfdf
-foreground-alt = #555
-primary = #ffb52a
-secondary = #e60053
-alert = #bd2c40
+include-file = ~/.config/polybar/colors
 
-[bar/example]
-;monitor = ${env:MONITOR:HDMI-1}
+[bar/top]
+monitor = ${env:MONITOR:eDP1}
+enable-ipc = true
+
 width = 100%
-height = 40
+height = 42
 ;offset-x = 1%
-;offset-y = 1%
-radius = 6.0
+offset-y = 0
+radius = 0
 fixed-center = false
 
 background = ${colors.background}
 foreground = ${colors.foreground}
 
 line-size = 3
-line-color = #f00
+line-color = ${colors.primary}
 
-border-size = 4
-border-color = #00000000
+border-color = ${colors.primary}
+border-size = 0
 
 padding-left = 0
 padding-right = 2
 
-module-margin-left = 1
-module-margin-right = 2
+module-margin-left = 0
+module-margin-right = 1
 
 font-0 = fixed:pixelsize=18;1
 font-1 = unifont:fontformat=truetype:size=16:antialias=false;0
@@ -57,23 +51,20 @@ font-2 = siji:pixelsize=18;1
 font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=24;3"
 font-4 = "Font Awesome 5 Brands:pixelsize=24;3"
 
-modules-left = i3 i3touchmenu
-modules-center = mpd
-modules-right = screenshot touchredraw touchkeyboard rotate backlightoff touchbrightdown touchbrightup closeactwin filesystem xkeyboard memory cpu system-gpu-intel battery temperature date
+modules-left = i3 windows i3touchmenu
+modules-center = xwindow
+modules-right = appmenu copy paste screenshot touchredraw touchkeyboard rotate backlightoff touchbrightdown touchbrightup closeactwin filesystem memory cpu system-gpu-intel temperature battery xkeyboard date
 
 tray-position = right
-tray-padding = 2
-;tray-background = #0063ff
+tray-padding = 0
+tray-background = ${colors.background}
 tray-scale = 1.0
 tray-maxsize = 36
 
-;wm-restack = bspwm
 wm-restack = i3
 
-;override-redirect = true
-
-;scroll-up = bspwm-desknext
-;scroll-down = bspwm-deskprev
+override-redirect = true
+bottom = false
 
 ;scroll-up = i3wm-wsnext
 ;scroll-down = i3wm-wsprev
@@ -81,57 +72,24 @@ wm-restack = i3
 cursor-click = pointer
 cursor-scroll = ns-resize
 
-[module/xwindow]
-type = internal/xwindow
-label = %title:0:30:...%
+[bar/expanded]
+inherit = bar/top
 
-[module/xkeyboard]
-type = internal/xkeyboard
-blacklist-0 = num lock
+wm-restack = none
+height = 360
+overline-size = 325
+font-0 = "DejaVu Sans:style=Bold:pixelsize=14;163"
+font-1 = "DejaVu Sans:pixelsize=14;163"
+font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=18;163"
+font-3 = "Font Awesome 5 Free:style=Regular:pixelsize=18;163"
+font-4 = "Font Awesome 5 Brands:pixelsize=18;163"
 
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-prefix-underline = ${colors.secondary}
+modules-left =
+modules-center =
+modules-right = options_close
 
-label-layout = %layout%
-label-layout-underline = ${colors.secondary}
 
-label-indicator-padding = 2
-label-indicator-margin = 1
-label-indicator-background = ${colors.secondary}
-label-indicator-underline = ${colors.secondary}
-
-[module/filesystem]
-type = internal/fs
-interval = 25
-
-mount-0 = /
-
-label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
-label-unmounted = %mountpoint% not mounted
-label-unmounted-foreground = ${colors.foreground-alt}
-
-[module/bspwm]
-type = internal/bspwm
-
-label-focused = %index%
-label-focused-background = ${colors.background-alt}
-label-focused-underline= ${colors.primary}
-label-focused-padding = 2
-
-label-occupied = %index%
-label-occupied-padding = 2
-
-label-urgent = %index%!
-label-urgent-background = ${colors.alert}
-label-urgent-padding = 2
-
-label-empty = %index%
-label-empty-foreground = ${colors.foreground-alt}
-label-empty-padding = 2
-
-; Separator in between workspaces
-; label-separator = |
+;===================== Modules left =======================
 
 [module/i3]
 type = internal/i3
@@ -143,7 +101,8 @@ wrapping-scroll = false
 ;pin-workspaces = true
 
 label-mode-padding = 2
-label-mode-foreground = #000
+;content-foreground = ${colors.foreground}
+;label-mode-foreground = #000
 label-mode-background = ${colors.primary}
 
 ; focused = Active workspace on focused monitor
@@ -158,336 +117,23 @@ label-unfocused-padding = 2
 
 ; visible = Active workspace on unfocused monitor
 label-visible = %index%
-label-visible-background = ${self.label-focused-background}
-label-visible-underline = ${self.label-focused-underline}
+;label-visible-background = ${self.label-focused-background}
+;label-visible-underline = ${self.label-focused-underline}
 label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
 label-urgent = %index%
-label-urgent-background = ${colors.alert}
+;label-urgent-background = ${colors.alert}
 label-urgent-padding = 2
 
 ; Separator in between workspaces
 ; label-separator = |
 
-
-[module/mpd]
-type = internal/mpd
-format-online = <label-song>  <icon-prev> <icon-stop> <toggle> <icon-next>
-
-icon-prev = <
-icon-stop = []
-icon-play = +
-icon-pause = ||
-icon-next = >
-
-label-song-maxlen = 25
-label-song-ellipsis = true
-
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <label> <bar>
-label = BL
-
-bar-width = 10
-bar-indicator = |
-bar-indicator-foreground = #fff
-bar-indicator-font = 2
-bar-fill = ─
-bar-fill-font = 2
-bar-fill-foreground = #9f78e1
-bar-empty = ─
-bar-empty-font = 2
-bar-empty-foreground = ${colors.foreground-alt}
-
-[module/backlight-acpi]
-inherit = module/xbacklight
-type = internal/backlight
-card = intel_backlight
-
-[module/cpu]
-type = internal/cpu
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #f90000
-label = %percentage:2%%
-
-[module/memory]
-type = internal/memory
-interval = 2
-format-prefix = " "
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #4bffdc
-label = %percentage_used%%
-
-[module/wlan]
-type = internal/network
-interface = wlan0
-interval = 3.0
-
-format-connected = <ramp-signal> <label-connected>
-format-connected-underline = #9f78e1
-label-connected = %essid%
-
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-
-ramp-signal-0 = 
-ramp-signal-1 = 
-ramp-signal-2 = 
-ramp-signal-3 = 
-ramp-signal-4 = 
-ramp-signal-foreground = ${colors.foreground-alt}
-
-[module/eth]
-type = internal/network
-interface = net0
-interval = 3.0
-
-format-connected-underline = #55aa55
-format-connected-prefix = " "
-format-connected-prefix-foreground = ${colors.foreground-alt}
-label-connected = %local_ip%
-
-format-disconnected =
-;format-disconnected = <label-disconnected>
-;format-disconnected-underline = ${self.format-connected-underline}
-;label-disconnected = %ifname% disconnected
-;label-disconnected-foreground = ${colors.foreground-alt}
-
-[module/date]
-type = internal/date
-interval = 5
-
-date =
-date-alt = " %d.%m.%Y"
-
-time = %H:%M
-time-alt = %H:%M:%S
-
-format-prefix = 
-format-prefix-foreground = ${colors.foreground-alt}
-format-underline = #0a6cf5
-
-label = %date% %time%
-
-[module/pulseaudio]
-type = internal/pulseaudio
-
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL %percentage%%
-label-volume-foreground = ${root.foreground}
-
-label-muted = 🔇 muted
-label-muted-foreground = #666
-
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = false
-bar-volume-indicator = |
-bar-volume-indicator-font = 2
-bar-volume-fill = ─
-bar-volume-fill-font = 2
-bar-volume-empty = ─
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
-
-[module/alsa]
-type = internal/alsa
-
-format-volume = <label-volume> <bar-volume>
-label-volume = VOL
-label-volume-foreground = ${root.foreground}
-
-format-muted-prefix = " "
-format-muted-foreground = ${colors.foreground-alt}
-label-muted = sound muted
-
-bar-volume-width = 10
-bar-volume-foreground-0 = #55aa55
-bar-volume-foreground-1 = #55aa55
-bar-volume-foreground-2 = #55aa55
-bar-volume-foreground-3 = #55aa55
-bar-volume-foreground-4 = #55aa55
-bar-volume-foreground-5 = #f5a70a
-bar-volume-foreground-6 = #ff5555
-bar-volume-gradient = false
-bar-volume-indicator = |
-bar-volume-indicator-font = 2
-bar-volume-fill = ─
-bar-volume-fill-font = 2
-bar-volume-empty = ─
-bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${colors.foreground-alt}
-
-[module/battery]
-type = internal/battery
-battery = BAT0
-adapter = ADP1
-full-at = 98
-
-format-charging = <animation-charging> <label-charging>
-format-charging-underline = #ffb52a
-
-format-discharging = <animation-discharging> <label-discharging>
-format-discharging-underline = ${self.format-charging-underline}
-
-format-full-prefix = "Ba "
-format-full-prefix-foreground = ${colors.foreground-alt}
-format-full-underline = ${self.format-charging-underline}
-
-ramp-capacity-0 = 0
-ramp-capacity-1 = 
-ramp-capacity-2 = 
-ramp-capacity-foreground = ${colors.foreground-alt}
-
-animation-charging-0 = ^B
-animation-charging-1 = 
-animation-charging-2 = 
-animation-charging-foreground = ${colors.foreground-alt}
-animation-charging-framerate = 750
-
-animation-discharging-0 = VB
-animation-discharging-1 = 
-animation-discharging-2 = 
-animation-discharging-foreground = ${colors.foreground-alt}
-animation-discharging-framerate = 750
-
-[module/temperature]
-type = internal/temperature
-thermal-zone = 0
-warn-temperature = 60
-
-format = <ramp> <label>
-format-underline = #f50a4d
-format-warn = <ramp> <label-warn>
-format-warn-underline = ${self.format-underline}
-
-label = %temperature-c%
-label-warn = %temperature-c%
-label-warn-foreground = ${colors.secondary}
-
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = ${colors.foreground-alt}
-
-[module/touchbrightdown]
-;; Brightness down
+[module/windows]
 type=custom/text
-content=""
+content=" "
 content-foreground=#fff
-click-left=xbacklight -dec 10 >/dev/null 2>&1 &
-
-[module/touchbrightup]
-;; Brightness up
-type=custom/text
-content=""
-content-foreground=#fff
-click-left=xbacklight -inc 10 >/dev/null 2>&1 &
-
-[module/backlightoff]
-type=custom/text
-content= 
-content-foreground=#fff
-click-left= xset dpms force off >/dev/null  2>&1 &
-
-[module/touchkeyboard]
-;; Open onscreen keyboard (onboard)
-type=custom/text
-content=""
-content-foreground=#fff
-click-left= dbus-send --type=method_call --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible >/dev/null 2>&1 &
-
- 
-[module/touchredraw]
-;; Restart i3 in order to redraw polybar to fit screen orientation
-type=custom/text
-content = ""
-content-foreground=#fff
-click-left = i3-msg 'restart' >/dev/null 2>&1 &
-
-[module/rotate]
-type=custom/text
-content = ""
-content-foreground=#fff
-click-left = exec /home/polina/.rotate.sh switch >/dev/null 2>&1 &
-
-[module/closeactwin]
-type = custom/text
-content = ""
-content-foreground=#fff
-click-left = exec xdotool key "Super_L+shift+Q" >/dev/null 2>&1 &
-
-[module/moveleft]
-type = custom/text
-content = "  <  "
-content-foreground=#fff
-click-left = exec xdotool key "Super_L+shift+Left" &
-
-[module/screenshot]
-type = custom/text
-content = ""
-content-foreground=#fff
-click-left = exec xdotool key "Print" >/dev/null 2>&1 &
-
-[module/konsole]
-type = custom/text
-content = ""
-content-foreground=#fff
-click-left = exec xdotool key "Super_L+Return" >/dev/null 2>&1 &
-
-
-[module/movedown]
-type = custom/text
-content = "  v  "
-content-foreground=#fff
-click-left = exec xdotool key "Super_L+shift+Down" &
-
-[module/touchvolmute]
-;; Mute
-type=custom/text
-content=" Vm "
-content-foreground=#fff
-click-left=pactl set-sink-mute @DEFAULT_SINK@ toggle >/dev/null 2>&1 &
-
-[module/touchvoldown]
-;; Volume down
-type=custom/text
-content=" Vd "
-content-foreground=#fff
-click-left=pactl set-sink-volume @DEFAULT_SINK@ -5% &
-
-[module/touchvolup]
-;; Volume up
-type=custom/text
-content="  Vu  "
-content-foreground=#fff
-click-left=pactl set-sink-volume @DEFAULT_SINK@ +5% &
-
-[module/system-bluetooth-bluetoothctl]
-type = custom/script
-content = B
-exec = bash ~/polybar-scripts/polybar-scripts/system-bluetooth-bluetoothctl/system-bluetooth-bluetoothctl.sh
-tail = true
-click-left = exec bash ~/polybar-scripts/polybar-scripts/system-bluetooth-bluetoothctl/system-bluetooth-bluetoothctl.sh --toggle &
-
-[module/system-gpu-intel]
-type = custom/script
-format-underline = #4bffdc
-exec = bash ~/polybar-scripts/polybar-scripts/system-gpu-intel/system-gpu-intel.sh
-interval = 20
+click-left = exec xdotool key "Super_L+grave" &
 
 [module/i3touchmenu]
 type = custom/menu
@@ -497,14 +143,14 @@ expand-right = true
 format-spacing = 1
 
 ;; Open the menu
-label-open = "  "
+label-open = "   "
 label-open-foreground = #FFF
 
 ;; Close the menu
-label-close = 
+label-close = " "
 label-close-foreground = ${colors.secondary}
-label-separator = "    "
-label-separator-foreground = ${colors.foreground-alt}
+label-separator = " "
+;label-separator-foreground = ${colors.foreground-alt}
 
 ;; Launcher
 menu-0-0 = 
@@ -544,7 +190,7 @@ menu-1-1-exec= chromium >/dev/null 2>&1 &
 
 ;; Launcher: urxvt
 menu-1-2=""
-menu-1-2-exec = konsole >/dev/null 2>&1 &
+menu-1-2-exec = urxvt >/dev/null 2>&1 &
 
 ;; Launcher: telegram
 menu-1-3=
@@ -698,51 +344,356 @@ menu-7-4 = "  "
 menu-7-4-exec = shutdown -h now
 
 
-;;[module/launchmenu]
-;;type = custom/menu
+;============ Modules center =================
 
-;;expand-right = true
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
 
-;;format-spacing = 1
 
-;;label-open = "Menu"
-;;label-open-foreground = ${colors.secondary}
-;;label-close = cancel
-;;label-close-foreground = ${colors.secondary}
-;;label-separator = |
-;;label-separator-foreground = ${colors.foreground-alt}
+;============= Modules right =================
 
-;;menu-0-0 = Konsole
-;;menu-0-0-exec = konsole
-;;menu-0-1 = Chromium
-;;menu-0-1-exec = chromium
-;;menu-0-2 = Dolphin
-;;menu-0-2-exec = dolphin
-;;menu-0-3 = Screenshot
-;;menu-0-3-exec = xdotool key "Print"
-;;menu-0-4 = Power
-;;menu-0-4-exec = menu-open-2
+[module/appmenu]
+type=custom/text
+content=" "
+content-foreground=#fff
+click-left = exec xdotool key "Super_L+d" &
 
-;;menu-1-0 = cancel
-;menu-1-0-exec = menu-open-0
+[module/copy]
+type=custom/text
+content=" "
+content-foreground=#fff
+click-left = exec xdotool key "ctrl+Insert" &
 
-;;menu-2-0 = reboot
-;;menu-2-0-exec = sudo reboot
-;;menu-2-1 = power off
-;;menu-2-1-exec = sudo poweroff
+[module/paste]
+type=custom/text
+content=" "
+content-foreground=#fff
+click-left = exec xdotool key "shift+Insert" &
 
-#include-file = /home/polina/i3touchmenu/i3touchmenu
+[module/screenshot]
+type = custom/text
+content = ""
+content-foreground=#fff
+click-left = exec xdotool key "Print" >/dev/null 2>&1 &
 
-[settings]
-screenchange-reload = true
-;compositing-background = xor
-;compositing-background = screen
-;compositing-foreground = source
-;compositing-border = over
-;pseudo-transparency = false
+[module/touchredraw]
+;; Restart i3 in order to redraw polybar to fit screen orientation
+type=custom/text
+content = " "
+content-foreground=#fff
+click-left = i3-msg 'restart' >/dev/null 2>&1 &
 
-[global/wm]
-margin-top = 5
-margin-bottom = 5
+[module/touchkeyboard]
+;; Open onscreen keyboard (onboard)
+type=custom/text
+content=" "
+content-foreground=#fff
+click-left= dbus-send --type=method_call --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible >/dev/null 2>&1 &
 
-; vim:ft=dosini
+[module/rotate]
+type=custom/text
+content = " "
+content-foreground=#fff
+click-left = exec /home/polina/.rotate.sh switch >/dev/null 2>&1 &
+
+[module/backlightoff]
+type=custom/text
+content= " "
+content-foreground=#fff
+click-left= xset dpms force off >/dev/null  2>&1 &
+
+[module/touchbrightdown]
+;; Brightness down
+type=custom/text
+content=" "
+content-foreground=#fff
+click-left=xbacklight -dec 5 >/dev/null 2>&1 &
+
+[module/touchbrightup]
+;; Brightness up
+type=custom/text
+content=" "
+content-foreground=#fff
+click-left=xbacklight -inc 5 >/dev/null 2>&1 &
+
+[module/closeactwin]
+type = custom/text
+content = " "
+content-foreground=#fff
+click-left = exec xdotool key "Super_L+shift+Q" >/dev/null 2>&1 &
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+content-foreground = ${colors.foreground}
+format-underline = #ffff00
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-underline = #ff5733
+label = %percentage_used%%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format = <label>
+format-underline = #ffff00
+label = %percentage:2%%
+
+[module/system-gpu-intel]
+type = custom/script
+format-underline = #008000
+exec = bash ~/polybar-scripts/polybar-scripts/system-gpu-intel/system-gpu-intel.sh
+interval = 20
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 60
+
+format = <ramp> <label>
+format-underline = #0000ff
+format-warn = <ramp> <label-warn>
+format-warn-underline = ${self.format-underline}
+
+label = %temperature-c%
+label-warn = %temperature-c%
+;label-warn-foreground = ${colors.secondary}
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+;ramp-foreground = ${colors.foreground-alt}
+
+[module/battery]
+type = internal/battery
+battery = axp288_fuel_gauge
+adapter = axp288_charger
+full-at = 98
+poll-interval = 5
+
+time-format = %H:%M
+
+format-charging = <label-charging>
+format-charging-underline = #ffb52a
+
+format-discharging = <label-discharging>
+format-discharging-underline = #ff0000
+
+format-full = <ramp-capacity>
+format-full-underline = #00ff00
+
+label-charging = %percentage_raw%%
+label-discharging = %percentage_raw%%
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+bar-capacity-width = 10
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-foreground = ${colors.foreground-alt}
+animation-charging-framerate = 750
+
+animation-discharging-0 = 
+animation-discharging-1 = 
+animation-discharging-2 = 
+animation-discharging-3 = 
+animation-discharging-4 = 
+animation-discharging-foreground = ${colors.foreground-alt}
+animation-discharging-framerate = 750
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+label-layout = %layout%
+label-layout-underline = #c70039
+
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = ${colors.secondary}
+label-indicator-underline = #c70039
+content-foreground = ${colors.foreground}
+
+[module/date]
+type = internal/date
+interval = 5
+
+date =
+date-alt = " %d.%m.%Y"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-underline = #581845
+
+label = %date% %time%
+
+[module/options_open]
+type = custom/text
+content-foreground = ${colors.foreground}
+content = ""
+click-left = ~/.config/i3/scripts/polybar_wrapper options
+
+[module/options_close]
+type = custom/text
+content-foreground = ${colors.primary}
+content = ""
+click-left = ~/.config/i3/scripts/polybar_wrapper options
+
+
+[module/xbacklight]
+type = internal/xbacklight
+
+format = <label> <bar>
+label = BL
+
+bar-width = 10
+bar-indicator = |
+bar-indicator-foreground = #fff
+bar-indicator-font = 2
+bar-fill = ─
+bar-fill-font = 2
+bar-fill-foreground = #9f78e1
+bar-empty = ─
+bar-empty-font = 2
+bar-empty-foreground = ${colors.foreground-alt}
+
+[module/backlight-acpi]
+inherit = module/xbacklight
+type = internal/backlight
+card = intel_backlight
+
+[module/wlan]
+type = internal/network
+interface = wlan0
+interval = 3.0
+
+format-connected = <ramp-signal> <label-connected>
+format-connected-underline = #9f78e1
+label-connected = %essid%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+ramp-signal-0 = 
+ramp-signal-1 = 
+ramp-signal-2 = 
+ramp-signal-3 = 
+ramp-signal-4 = 
+ramp-signal-foreground = ${colors.foreground-alt}
+
+[module/eth]
+type = internal/network
+interface = net0
+interval = 3.0
+
+format-connected-underline = #55aa55
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.foreground-alt}
+label-connected = %local_ip%
+
+format-disconnected =
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <label-volume> <bar-volume>
+label-volume = VOL %percentage%%
+label-volume-foreground = ${root.foreground}
+
+label-muted = 🔇 muted
+label-muted-foreground = #666
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+[module/alsa]
+type = internal/alsa
+
+format-volume = <label-volume> <bar-volume>
+label-volume = VOL
+label-volume-foreground = ${root.foreground}
+
+format-muted-prefix = " "
+format-muted-foreground = ${colors.foreground-alt}
+label-muted = sound muted
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground-alt}
+
+
+
+ 
+[module/touchvolmute]
+;; Mute
+type=custom/text
+content=" Vm "
+content-foreground=#fff
+click-left=pactl set-sink-mute @DEFAULT_SINK@ toggle >/dev/null 2>&1 &
+
+[module/touchvoldown]
+;; Volume down
+type=custom/text
+content=" Vd "
+content-foreground=#fff
+click-left=pactl set-sink-volume @DEFAULT_SINK@ -5% &
+
+[module/touchvolup]
+;; Volume up
+type=custom/text
+content="  Vu  "
+content-foreground=#fff
+click-left=pactl set-sink-volume @DEFAULT_SINK@ +5% &
+
+
