@@ -4,3 +4,11 @@ foreground     = ${xrdb:foreground      :#93A1A1}
 primary        = ${xrdb:primary         :#268BD2}
 secondary      = ${xrdb:secondary       :#859900}
 urgent         = ${xrdb:urgent          :#DC322F}
+
+red            = ${xrdb:color1          :#D08770}
+green          = ${xrdb:color2          :#A3BE8C}
+yellow         = ${xrdb:color3          :#EBCB8B}
+blue           = ${xrdb:color4          :#81A1C1}
+violet         = ${xrdb:color5          :#B48EAD}
+aquamarine     = ${xrdb:color6          :#88C0D0}
+aquamarine-alt = ${xrdb:color14         :#8FBCBB}

@@ -50,10 +50,12 @@ font-1 = unifont:fontformat=truetype:size=16:antialias=false;0
 font-2 = siji:pixelsize=18;1
 font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=24;3"
 font-4 = "Font Awesome 5 Brands:pixelsize=24;3"
+font-5 = "Material Design Icons:style=Regular:pixelsize=28;4"
+font-6 = "Material Design Icons:style=Regular:pixelsize=18;0"
 
 modules-left = i3 windows i3touchmenu
 modules-center = xwindow
-modules-right = appmenu copy paste screenshot touchredraw touchkeyboard rotate backlightoff touchbrightdown touchbrightup closeactwin filesystem memory cpu system-gpu-intel temperature battery xkeyboard date
+modules-right = appmenu copy paste touchredraw touchkeyboard system-bluetooth-bluetoothctl  touchbrightdown touchbrightup closeactwin updates-arch-combined filesystem memory cpu battery temperature xkeyboard date
 
 tray-position = right
 tray-padding = 0
@@ -83,6 +85,7 @@ font-1 = "DejaVu Sans:pixelsize=14;163"
 font-2 = "Font Awesome 5 Free:style=Solid:pixelsize=18;163"
 font-3 = "Font Awesome 5 Free:style=Regular:pixelsize=18;163"
 font-4 = "Font Awesome 5 Brands:pixelsize=18;163"
+font-5 = "Font Awesome 5 Free:style=Light:pixelsize=14;163"
 
 modules-left =
 modules-center =
@@ -101,14 +104,14 @@ wrapping-scroll = false
 ;pin-workspaces = true
 
 label-mode-padding = 2
-;content-foreground = ${colors.foreground}
-;label-mode-foreground = #000
-label-mode-background = ${colors.primary}
+content-foreground = ${colors.foreground}
+label-mode-foreground = #000
+label-mode-background = ${colors.secondary}
 
 ; focused = Active workspace on focused monitor
 label-focused = %index%
 label-focused-background = ${colors.background-alt}
-label-focused-underline= ${colors.primary}
+label-focused-underline= ${colors.secondary}
 label-focused-padding = 2
 
 ; unfocused = Inactive workspace on any monitor
@@ -123,7 +126,7 @@ label-visible-padding = ${self.label-focused-padding}
 
 ; urgent = Workspace with urgency hint set
 label-urgent = %index%
-;label-urgent-background = ${colors.alert}
+label-urgent-background = ${colors.urgent}
 label-urgent-padding = 2
 
 ; Separator in between workspaces
@@ -131,8 +134,8 @@ label-urgent-padding = 2
 
 [module/windows]
 type=custom/text
-content=" "
-content-foreground=#fff
+content="󰖲 "
+content-foreground=${colors.foreground}
 click-left = exec xdotool key "Super_L+grave" &
 
 [module/i3touchmenu]
@@ -143,42 +146,50 @@ expand-right = true
 format-spacing = 1
 
 ;; Open the menu
-label-open = "   "
-label-open-foreground = #FFF
+label-open = " 󰣇  "
+label-open-foreground = ${colors.aquamarine}
 
 ;; Close the menu
 label-close = " "
-label-close-foreground = ${colors.secondary}
+label-close-foreground = ${colors.urgent}
 label-separator = " "
-;label-separator-foreground = ${colors.foreground-alt}
+label-separator-foreground = ${colors.primary}
 
 ;; Launcher
 menu-0-0 = 
 menu-0-0-exec = menu-open-1
 
 ;; Move
-menu-0-1 = 
-menu-0-1-exec = menu-open-2
+;menu-0-1 = 
+;menu-0-1-exec = menu-open-2
 
 ;; Layout
-menu-0-2 = 
-menu-0-2-exec = menu-open-3
+;menu-0-2 = 
+;menu-0-2-exec = menu-open-3
 
 ;; Split
-menu-0-3 = 
-menu-0-3-exec = menu-open-4
+;menu-0-3 = 
+;menu-0-3-exec = menu-open-2
 
 ;; Resize
-menu-0-4 = 
-menu-0-4-exec = menu-open-5
+;menu-0-1 = 
+;menu-0-1-exec = menu-open-2
 
 ;; Move to workspace
-menu-0-5 = 
-menu-0-5-exec = menu-open-6
+menu-0-1 = 
+menu-0-1-exec = menu-open-2
 
 ;; Power
-menu-0-6 ="   " 
-menu-0-6-exec = menu-open-7
+menu-0-2 ="" 
+menu-0-2-exec = menu-open-3
+
+;; Rotate
+menu-0-3 = 󰑵
+menu-0-3-exec = /home/polina/.rotate.sh switch >/dev/null 2>&1 &
+
+;; screenshot
+menu-0-4 = 󰨵
+menu-0-4-exec = exec xdotool key "Print" >/dev/null 2>&1 &
 
 ;; Launcher: Back to main menu
 menu-1-0 = 
@@ -209,139 +220,139 @@ menu-1-6=
 menu-1-6-exec=vlc >/dev/null 2>&1 &
 
 ;; Move: Back to main menu
+;menu-2-0 = 
+;menu-2-0-exec = menu-open-0
+
+;; Move: Left
+;menu-2-1 = 
+;menu-2-1-exec = i3-msg 'move left >/dev/null 2>&1 &
+;; Move: Right
+;menu-2-2 = 
+;menu-2-2-exec = i3-msg 'move right' >/dev/null 2>&1 &
+
+;; Move: Up
+;menu-2-3 = 
+;menu-2-3-exec = i3-msg 'move up' >/dev/null 2>&1 &
+
+;; Move: Down
+;menu-2-4 = "   "
+;menu-2-4-exec = i3-msg 'move down' >/dev/null 2>&1 &
+
+;; Layout: Back to main menu
+;;menu-3-0 = 
+;menu-3-0-exec = menu-open-0
+
+;; Layout: Split
+;menu-3-1 = 
+;menu-3-1-exec = i3-msg 'layout toggle split' >/dev/null 2>&1 &
+
+;; Layout: Stacking
+;menu-3-2 = 
+;menu-3-2-exec = i3-msg 'layout stacking' >/dev/null 2>&1 &
+
+;; Layout: Tabbed
+;menu-3-3 = 
+;menu-3-3-exec = i3-msg 'layout tabbed' >/dev/null 2>&1 &
+
+;; Layout: Toggle floating
+;menu-3-4 = "   "
+;menu-3-4-exec = i3-msg 'floating toggle' >/dev/null 2>&1 &
+
+;; Split: Back to main menu
+;menu-4-0 = 
+;menu-4-0-exec = menu-open-0
+
+;; Split: Vertical
+;menu-4-1 = 
+;menu-4-1-exec = i3-msg 'split v' >/dev/null 2>&1 &
+
+;; Split: Horizontal
+;menu-4-2 = "   "
+;menu-4-2-exec = i3-msg 'split h' >/dev/null 2>&1 &
+
+;; Resize: Back to main menu
+;;menu-2-0 = 
+;menu-2-0-exec = menu-open-0
+
+;; Resize: Grow height
+;menu-2-1 = 
+;menu-2-1-exec = i3-msg 'resize grow height 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Resize: Shrink height
+;menu-2-2 =
+;menu-2-2-exec = i3-msg 'resize shrink height 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Resize: Grow width
+;menu-2-3 = 
+;menu-2-3-exec = i3-msg 'resize grow width 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Resize: Shrink width
+;menu-2-4 = "    "
+;menu-2-4-exec = i3-msg 'resize shrink width 5 px or 5 ppt' >/dev/null 2>&1 &
+
+;; Move to workspace: Back to main menu
 menu-2-0 = 
 menu-2-0-exec = menu-open-0
 
-;; Move: Left
-menu-2-1 = 
-menu-2-1-exec = i3-msg 'move left >/dev/null 2>&1 &
-;; Move: Right
-menu-2-2 = 
-menu-2-2-exec = i3-msg 'move right' >/dev/null 2>&1 &
+;; Move to workspace: 1
+menu-2-1 = 1
+menu-2-1-exec = i3-msg 'move container to workspace 1'
 
-;; Move: Up
-menu-2-3 = 
-menu-2-3-exec = i3-msg 'move up' >/dev/null 2>&1 &
+;; Move to workspace: 2
+menu-2-2 = 2
+menu-2-2-exec = i3-msg 'move container to workspace 2'
 
-;; Move: Down
-menu-2-4 = "   "
-menu-2-4-exec = i3-msg 'move down' >/dev/null 2>&1 &
+;; Move to workspace: 3
+menu-2-3 = 3
+menu-2-3-exec = i3-msg 'move container to workspace 3'
 
-;; Layout: Back to main menu
+;; Move to workspace: 4
+menu-2-4 = 4
+menu-2-4-exec = i3-msg 'move container to workspace 4'
+
+;; Move to workspace: 5
+menu-2-5 = 5
+menu-2-5-exec = i3-msg 'move container to workspace 5'
+
+;; Move to workspace: 6
+menu-2-6 = 6
+menu-2-6-exec = i3-msg 'move container to workspace 6'
+
+;; Move to workspace: 7
+menu-2-7 = 7
+menu-2-7-exec = i3-msg 'move container to workspace 7'
+
+;; Move to workspace: 8
+menu-2-8 = 8
+menu-2-8-exec = i3-msg 'move container to workspace 8'
+
+;; Move to workspace: 9
+menu-2-9 = 9
+menu-2-9-exec = i3-msg 'move container to workspace 9'
+
+;; Move to workspace: 10
+menu-2-10 = "10    "
+menu-2-10-exec = i3-msg 'move container to workspace 10'
+
+;; Power: Back to main menu
 menu-3-0 = 
 menu-3-0-exec = menu-open-0
 
-;; Layout: Split
-menu-3-1 = 
-menu-3-1-exec = i3-msg 'layout toggle split' >/dev/null 2>&1 &
-
-;; Layout: Stacking
-menu-3-2 = 
-menu-3-2-exec = i3-msg 'layout stacking' >/dev/null 2>&1 &
-
-;; Layout: Tabbed
-menu-3-3 = 
-menu-3-3-exec = i3-msg 'layout tabbed' >/dev/null 2>&1 &
-
-;; Layout: Toggle floating
-menu-3-4 = "   "
-menu-3-4-exec = i3-msg 'floating toggle' >/dev/null 2>&1 &
-
-;; Split: Back to main menu
-menu-4-0 = 
-menu-4-0-exec = menu-open-0
-
-;; Split: Vertical
-menu-4-1 = 
-menu-4-1-exec = i3-msg 'split v' >/dev/null 2>&1 &
-
-;; Split: Horizontal
-menu-4-2 = "   "
-menu-4-2-exec = i3-msg 'split h' >/dev/null 2>&1 &
-
-;; Resize: Back to main menu
-menu-5-0 = 
-menu-5-0-exec = menu-open-0
-
-;; Resize: Grow height
-menu-5-1 = 
-menu-5-1-exec = i3-msg 'resize grow height 5 px or 5 ppt' >/dev/null 2>&1 &
-
-;; Resize: Shrink height
-menu-5-2 =
-menu-5-2-exec = i3-msg 'resize shrink height 5 px or 5 ppt' >/dev/null 2>&1 &
-
-;; Resize: Grow width
-menu-5-3 = 
-menu-5-3-exec = i3-msg 'resize grow width 5 px or 5 ppt' >/dev/null 2>&1 &
-
-;; Resize: Shrink width
-menu-5-4 = "    "
-menu-5-4-exec = i3-msg 'resize shrink width 5 px or 5 ppt' >/dev/null 2>&1 &
-
-;; Move to workspace: Back to main menu
-menu-6-0 = 
-menu-6-0-exec = menu-open-0
-
-;; Move to workspace: 1
-menu-6-1 = 1
-menu-6-1-exec = i3-msg 'move container to workspace 1'
-
-;; Move to workspace: 2
-menu-6-2 = 2
-menu-6-2-exec = i3-msg 'move container to workspace 2'
-
-;; Move to workspace: 3
-menu-6-3 = 3
-menu-6-3-exec = i3-msg 'move container to workspace 3'
-
-;; Move to workspace: 4
-menu-6-4 = 4
-menu-6-4-exec = i3-msg 'move container to workspace 4'
-
-;; Move to workspace: 5
-menu-6-5 = 5
-menu-6-5-exec = i3-msg 'move container to workspace 5'
-
-;; Move to workspace: 6
-menu-6-6 = 6
-menu-6-6-exec = i3-msg 'move container to workspace 6'
-
-;; Move to workspace: 7
-menu-6-7 = 7
-menu-6-7-exec = i3-msg 'move container to workspace 7'
-
-;; Move to workspace: 8
-menu-6-8 = 8
-menu-6-8-exec = i3-msg 'move container to workspace 8'
-
-;; Move to workspace: 9
-menu-6-9 = 9
-menu-6-9-exec = i3-msg 'move container to workspace 9'
-
-;; Move to workspace: 10
-menu-6-10 = "10    "
-menu-6-10-exec = i3-msg 'move container to workspace 10'
-
-;; Power: Back to main menu
-menu-7-0 = 
-menu-7-0-exec = menu-open-0
-
 ;; Power: Screen off
-menu-7-1 = 
-menu-7-1-exec = xset dpms force off >/dev/null 2>&1 &
+menu-3-1 = 
+menu-3-1-exec = xset dpms force off >/dev/null 2>&1 &
 
 ;; Power: Lock
-menu-7-2 = 
-menu-7-2-exec = i3lock -i /home/polina/Pictures/zmh0ks.png >/dev/null 2>&1 &
+;menu-7-2 = 
+;menu-7-2-exec = i3lock -i /home/polina/Pictures/zmh0ks.png >/dev/null 2>&1 &
 
 ;; Power: Reboot
-menu-7-3 = 
-menu-7-3-exec = shutdown -r now
+menu-3-2 = 
+menu-3-2-exec = shutdown -r now
 
 ;; Power: Shutdown
-menu-7-4 = "  "
-menu-7-4-exec = shutdown -h now
+menu-3-3 = "  "
+menu-3-3-exec = shutdown -h now
 
 
 ;============ Modules center =================
@@ -356,96 +367,109 @@ label = %title:0:30:...%
 [module/appmenu]
 type=custom/text
 content=" "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = exec xdotool key "Super_L+d" &
 
 [module/copy]
 type=custom/text
 content=" "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = exec xdotool key "ctrl+Insert" &
 
 [module/paste]
 type=custom/text
 content=" "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = exec xdotool key "shift+Insert" &
 
 [module/screenshot]
 type = custom/text
 content = ""
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = exec xdotool key "Print" >/dev/null 2>&1 &
 
 [module/touchredraw]
 ;; Restart i3 in order to redraw polybar to fit screen orientation
 type=custom/text
 content = " "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = i3-msg 'restart' >/dev/null 2>&1 &
 
 [module/touchkeyboard]
 ;; Open onscreen keyboard (onboard)
 type=custom/text
 content=" "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left= dbus-send --type=method_call --print-reply --dest=org.onboard.Onboard /org/onboard/Onboard/Keyboard org.onboard.Onboard.Keyboard.ToggleVisible >/dev/null 2>&1 &
 
 [module/rotate]
 type=custom/text
 content = " "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = exec /home/polina/.rotate.sh switch >/dev/null 2>&1 &
+
+[module/system-bluetooth-bluetoothctl]
+type = custom/script
+#content = " "
+#content-foreground=${colors.foreground}
+exec = ~/polybar-scripts/polybar-scripts/system-bluetooth-bluetoothctl/system-bluetooth-bluetoothctl.sh
+tail = true
+click-left = exec ~/polybar-scripts/polybar-scripts/system-bluetooth-bluetoothctl/system-bluetooth-bluetoothctl.sh --toggle &
 
 [module/backlightoff]
 type=custom/text
 content= " "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left= xset dpms force off >/dev/null  2>&1 &
 
 [module/touchbrightdown]
 ;; Brightness down
 type=custom/text
 content=" "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left=xbacklight -dec 5 >/dev/null 2>&1 &
 
 [module/touchbrightup]
 ;; Brightness up
 type=custom/text
 content=" "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left=xbacklight -inc 5 >/dev/null 2>&1 &
 
 [module/closeactwin]
 type = custom/text
 content = " "
-content-foreground=#fff
+content-foreground=${colors.foreground}
 click-left = exec xdotool key "Super_L+shift+Q" >/dev/null 2>&1 &
+
+[module/updates-arch-combined]
+type = custom/script
+exec = ~/polybar-scripts/polybar-scripts/updates-arch-combined/updates-arch-combined.sh
+interval = 600
 
 [module/filesystem]
 type = internal/fs
 interval = 25
+format-mounted-underline = ${colors.red}
 
 mount-0 = /
 
-label-mounted = %percentage_used%%
+label-mounted = %percentage_used%%{T7}󰑹%{T-}
 label-unmounted = %mountpoint% not mounted
-content-foreground = ${colors.foreground}
-format-underline = #ffff00
+;content-foreground = ${colors.foreground}
 
 [module/memory]
 type = internal/memory
 interval = 2
-format-underline = #ff5733
-label = %percentage_used%%
+format-underline = ${colors.yellow}
+label = %percentage_used%%{T7}󰍛%{T-}
 
 [module/cpu]
 type = internal/cpu
 interval = 2
 format = <label>
-format-underline = #ffff00
-label = %percentage:2%%
+format-underline = ${colors.green}
+label = %percentage:2%%{T7}󰘚%{T-}
 
 [module/system-gpu-intel]
 type = custom/script
@@ -458,9 +482,9 @@ type = internal/temperature
 thermal-zone = 0
 warn-temperature = 60
 
-format = <ramp> <label>
-format-underline = #0000ff
-format-warn = <ramp> <label-warn>
+format = <label>
+format-underline = ${colors.blue}
+format-warn = <ramp><label-warn>
 format-warn-underline = ${self.format-underline}
 
 label = %temperature-c%
@@ -482,16 +506,16 @@ poll-interval = 5
 time-format = %H:%M
 
 format-charging = <label-charging>
-format-charging-underline = #ffb52a
+format-charging-underline = ${colors.yellow}
 
 format-discharging = <label-discharging>
-format-discharging-underline = #ff0000
+format-discharging-underline = ${colors.red}
 
 format-full = <ramp-capacity>
-format-full-underline = #00ff00
+format-full-underline = ${colors.green}
 
-label-charging = %percentage_raw%%
-label-discharging = %percentage_raw%%
+label-charging = %percentage_raw%%{T7}󰂄%{T-}
+label-discharging = %percentage_raw%%{T7}󰂎%{T-}
 
 ramp-capacity-0 = 
 ramp-capacity-1 = 
@@ -521,12 +545,12 @@ type = internal/xkeyboard
 blacklist-0 = num lock
 
 label-layout = %layout%
-label-layout-underline = #c70039
+label-layout-underline = ${colors.aquamarine}
 
-label-indicator-padding = 2
-label-indicator-margin = 1
+label-indicator-padding = 0
+label-indicator-margin = 0
 label-indicator-background = ${colors.secondary}
-label-indicator-underline = #c70039
+label-indicator-underline = ${colors.aquamarine}
 content-foreground = ${colors.foreground}
 
 [module/date]
@@ -534,14 +558,14 @@ type = internal/date
 interval = 5
 
 date =
-date-alt = " %d.%m.%Y"
+date-alt = "%d.%m.%Y  "
 
-time = %H:%M
-time-alt = %H:%M:%S
+time =%H:%M
+time-alt =%H:%M:%S
 
-format-underline = #581845
+format-underline = ${colors.violet}
 
-label = %date% %time%
+label =%date%%time%
 
 [module/options_open]
 type = custom/text
